@@ -28,6 +28,8 @@ public class FareCalculatorService {
 
         if (durationInMinutes >= 30){
             durationInMinutes = durationInMinutes - 30;
+        } else {
+            durationInMinutes = 0;
         }
         System.out.println("Park duration in minutes with the free 30min: "+durationInMinutes);
 
