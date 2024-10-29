@@ -26,6 +26,13 @@ public class DBConstants {
             "  AND VEHICLE_TYPE = ?\n" +
             "  AND IN_TIME IS NOT NULL\n" +
             "  AND OUT_TIME IS NULL;";
+
+    public static final String IS_VEHICLE_RECURRENT = "SELECT *\n" +
+            "FROM ticket\n" +
+            "WHERE VEHICLE_REG_NUMBER = ?\n" +
+            "  AND VEHICLE_TYPE = ?\n" +
+            "  AND IN_TIME IS NOT NULL\n" +
+            "  AND OUT_TIME IS NOT NULL;";
 }
 
 // Créer une requete permettant de savoir si il s'agit d'un utilisateur récurrent à partir de ?
