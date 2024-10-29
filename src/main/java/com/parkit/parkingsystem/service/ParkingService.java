@@ -124,8 +124,10 @@ public class ParkingService {
 
     public void processExitingVehicle() {
         try{
+            ParkingType parkingType = getVehichleType();
             String vehicleRegNumber = getVehichleRegNumber();
-            Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
+            Ticket ticket = ticketDAO.getTicket(vehicleRegNumber, parkingType.toString());
+            // System.out.println("Vehicle type : "+ticket.getVehicleType());
             Date outTime = new Date();
             ticket.setOutTime(outTime);
             fareCalculatorService.calculateFare(ticket);
