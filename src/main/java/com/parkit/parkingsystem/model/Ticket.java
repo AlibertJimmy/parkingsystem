@@ -1,5 +1,7 @@
 package com.parkit.parkingsystem.model;
 
+import com.parkit.parkingsystem.constants.ParkingType;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -10,6 +12,7 @@ public class Ticket {
     private double price;
     private Date inTime;
     private Date outTime;
+    private ParkingType vehicleType;
 
     public int getId() {
         return id;
@@ -58,4 +61,8 @@ public class Ticket {
     public void setOutTime(Date outTime) {
         this.outTime = outTime;
     }
+
+    public ParkingType getVehicleType() { return vehicleType;}
+
+    public void setVehicleType(ParkingType vehicleType){ this.vehicleType = vehicleType;}
 }

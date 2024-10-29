@@ -29,7 +29,12 @@ public class ParkingService {
 
     public void processIncomingVehicle() {
         try{
-            ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
+            // ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
+
+            Object[] result = getNextParkingNumberIfAvailable();
+            ParkingSpot parkingSpot = (ParkingSpot) result[0];
+            ParkingType parkingType = (ParkingType) result[1];
+
             if(parkingSpot !=null && parkingSpot.getId() > 0){
                 String vehicleRegNumber = getVehichleRegNumber();
                 parkingSpot.setAvailable(false);
@@ -44,10 +49,14 @@ public class ParkingService {
                 ticket.setPrice(0);
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
+                ticket.setVehicleType(parkingType);
                 ticketDAO.saveTicket(ticket);
                 System.out.println("Generated Ticket and saved in DB");
                 System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
                 System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);
+            }
+            else {
+                // logger.info("The parking don't have anymore slots for "+parkingType);
             }
         }catch(Exception e){
             logger.error("Unable to process incoming vehicle",e);
@@ -59,14 +68,17 @@ public class ParkingService {
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
 
-    public ParkingSpot getNextParkingNumberIfAvailable(){
+    public Object[] getNextParkingNumberIfAvailable(){
         int parkingNumber=0;
         ParkingSpot parkingSpot = null;
+        ParkingType parkingType = null;
         try{
-            ParkingType parkingType = getVehichleType();
+            // ParkingType parkingType = getVehichleType();
+            parkingType = getVehichleType();
             parkingNumber = parkingSpotDAO.getNextAvailableSlot(parkingType);
             if(parkingNumber > 0){
                 parkingSpot = new ParkingSpot(parkingNumber,parkingType, true);
+
             }else{
                 throw new Exception("Error fetching parking number from DB. Parking slots might be full");
             }
@@ -75,11 +87,11 @@ public class ParkingService {
         }catch(Exception e){
             logger.error("Error fetching next available parking slot", e);
         }
-        return parkingSpot;
+        return new Object[] {parkingSpot, parkingType};
     }
 
     private ParkingType getVehichleType(){
-        System.out.println("Please select vehicle type from menu");
+    System.out.println("Please select vehicle type from menu");
         System.out.println("1 CAR");
         System.out.println("2 BIKE");
         int input = inputReaderUtil.readSelection();

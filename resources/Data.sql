@@ -51,3 +51,7 @@ insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(3,true,'CAR');
 insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(4,true,'BIKE');
 insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(5,true,'BIKE');
 commit;
+
+-- ALTER TABLE ticket ADD VEHICLE_TYPE VARCHAR(4) NOT NULL;
+-- TRUNCATE TABLE ticket;
+-- UPDATE parking SET AVAILABLE = 1 WHERE AVAILABLE = 0 AND PARKING_NUMBER > 0;
