@@ -22,7 +22,10 @@ public class ParkingSpotDAO {
         try {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps = con.prepareStatement(DBConstants.GET_NEXT_PARKING_SPOT);
+
+            // Add a parameters to check that the current registration and vehicle type isn't already in
             ps.setString(1, parkingType.toString());
+
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 result = rs.getInt(1);;

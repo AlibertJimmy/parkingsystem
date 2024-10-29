@@ -31,29 +31,39 @@ public class ParkingService {
         try{
             // ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
 
+
             Object[] result = getNextParkingNumberIfAvailable();
             ParkingSpot parkingSpot = (ParkingSpot) result[0];
             ParkingType parkingType = (ParkingType) result[1];
 
             if(parkingSpot !=null && parkingSpot.getId() > 0){
                 String vehicleRegNumber = getVehichleRegNumber();
-                parkingSpot.setAvailable(false);
-                parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
+                // check if the vehicule is already inside, if so do not create a ticket
+                boolean isVehiculeAlreadyInside = ticketDAO.isTicketAlreadyExisting(vehicleRegNumber, parkingType);
+                if(!isVehiculeAlreadyInside){
+                    System.out.println("Process to ticket creation");
+                    parkingSpot.setAvailable(false);
+                    parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
 
-                Date inTime = new Date();
-                Ticket ticket = new Ticket();
-                //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-                //ticket.setId(ticketID);
-                ticket.setParkingSpot(parkingSpot);
-                ticket.setVehicleRegNumber(vehicleRegNumber);
-                ticket.setPrice(0);
-                ticket.setInTime(inTime);
-                ticket.setOutTime(null);
-                ticket.setVehicleType(parkingType);
-                ticketDAO.saveTicket(ticket);
-                System.out.println("Generated Ticket and saved in DB");
-                System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
-                System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);
+                    Date inTime = new Date();
+                    Ticket ticket = new Ticket();
+                    //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
+                    //ticket.setId(ticketID);
+                    ticket.setParkingSpot(parkingSpot);
+                    ticket.setVehicleRegNumber(vehicleRegNumber);
+                    ticket.setPrice(0);
+                    ticket.setInTime(inTime);
+                    ticket.setOutTime(null);
+                    ticket.setVehicleType(parkingType);
+                    ticketDAO.saveTicket(ticket);
+                    System.out.println("Generated Ticket and saved in DB");
+                    System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
+                    System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);
+                }
+                else{
+                    System.out.println("Can't process to ticket creation, vehicle already inside");
+                }
+
             }
             else {
                 // logger.info("The parking don't have anymore slots for "+parkingType);
@@ -68,6 +78,7 @@ public class ParkingService {
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
 
+
     public Object[] getNextParkingNumberIfAvailable(){
         int parkingNumber=0;
         ParkingSpot parkingSpot = null;
@@ -75,6 +86,8 @@ public class ParkingService {
         try{
             // ParkingType parkingType = getVehichleType();
             parkingType = getVehichleType();
+            // Search if the vehicle is already inside before to look for a spot
+
             parkingNumber = parkingSpotDAO.getNextAvailableSlot(parkingType);
             if(parkingNumber > 0){
                 parkingSpot = new ParkingSpot(parkingNumber,parkingType, true);

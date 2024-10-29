@@ -70,6 +70,8 @@ public class TicketDAO {
         }
     }
 
+
+
     public boolean updateTicket(Ticket ticket) {
         Connection con = null;
         try {
@@ -86,5 +88,29 @@ public class TicketDAO {
             dataBaseConfig.closeConnection(con);
         }
         return false;
+    }
+
+    public boolean isTicketAlreadyExisting(String vehicleRegNumber, ParkingType vehicleType) {
+        Connection con = null;
+        boolean ticketAlreadyExisting = false;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.IS_VEHICLE_ALREADY_IN);
+
+            ps.setString(1,vehicleRegNumber);
+            ps.setString(2,vehicleType.toString());
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                ticketAlreadyExisting = true;
+                System.out.println("Vehicle already inside");
+            }
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+        }catch (Exception ex){
+            logger.error("Error fetching next available slot",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+            return ticketAlreadyExisting;
+        }
     }
 }
