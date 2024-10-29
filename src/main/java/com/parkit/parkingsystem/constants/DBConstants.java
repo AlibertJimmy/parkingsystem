@@ -16,6 +16,7 @@ public class DBConstants {
             "where parking.PARKING_NUMBER = ticket.PARKING_NUMBER \n"+
             "and ticket.VEHICLE_REG_NUMBER=? \n"+
             "and ticket.VEHICLE_TYPE=? \n"+
+            "and ticket.OUT_TIME IS NULL \n"+
             "order by ticket.IN_TIME  limit 1";
 
     // Request to check if the vehicle is already inside the parking before to look for an available place for it and therefore creating a new ticket
