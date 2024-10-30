@@ -126,7 +126,11 @@ public class ParkingService {
         try{
             ParkingType parkingType = getVehichleType();
             String vehicleRegNumber = getVehichleRegNumber();
+
+            // System.out.println("processExitingVehicle\n");
+            // System.out.println("vehicleRegNumber : "+vehicleRegNumber+" vehicleType : "+parkingType);
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber, parkingType.toString());
+            // System.out.println("Ticket passed to calculate the fare :");
             // System.out.println("Vehicle type : "+ticket.getVehicleType());
             Date outTime = new Date();
             ticket.setOutTime(outTime);
@@ -144,4 +148,6 @@ public class ParkingService {
             logger.error("Unable to process exiting vehicle",e);
         }
     }
+
+
 }

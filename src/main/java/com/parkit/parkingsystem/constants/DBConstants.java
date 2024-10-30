@@ -35,8 +35,5 @@ public class DBConstants {
             "  AND OUT_TIME IS NOT NULL;";
 }
 
-// Créer une requete permettant de savoir si il s'agit d'un utilisateur récurrent à partir de ?
-// -> du fait qu'il soit deja présent dans la database ?
-// -> créer une colonne pour indiquer si le véhicule est récurrent ou non
 
 

@@ -42,8 +42,8 @@ public class TicketDAO {
     }
 
     public Ticket getTicket(String vehicleRegNumber, String vehicleType) {
-        System.out.println("getTicket\n");
-        System.out.println("vehicleRegNumber : "+vehicleRegNumber+" vehicleType : "+vehicleType);
+        System.out.println("getTicket");
+        System.out.println("vehicleRegNumber : "+vehicleRegNumber+" vehicleType : "+vehicleType+"\n");
         Connection con = null;
         Ticket ticket = null;
         try {
@@ -52,10 +52,10 @@ public class TicketDAO {
             //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
             ps.setString(1,vehicleRegNumber);
             ps.setString(2,vehicleType);
-            System.out.println("before error");
             ResultSet rs = ps.executeQuery();
-            System.out.println("test");
+
             if(rs.next()){
+
                 ticket = new Ticket();
                 ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(1), ParkingType.valueOf(rs.getString(6)),false);
                 ticket.setParkingSpot(parkingSpot);
@@ -64,6 +64,8 @@ public class TicketDAO {
                 ticket.setPrice(rs.getDouble(3));
                 ticket.setInTime(rs.getTimestamp(4));
                 ticket.setOutTime(rs.getTimestamp(5));
+                // Added setter
+                ticket.setVehicleType(parkingSpot.getParkingType());
             }
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
@@ -116,6 +118,32 @@ public class TicketDAO {
         }finally {
             dataBaseConfig.closeConnection(con);
             return ticketAlreadyExisting;
+        }
+    }
+
+    public boolean isUserRecurrent(String vehicleRegNumber, ParkingType vehicleType){
+        Connection con = null;
+        boolean userRecurrent = false;
+        System.out.println("isUserCurrent\n");
+        System.out.println("vehicleRegNumber : "+vehicleRegNumber+" vehicleType : "+vehicleType);
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.IS_VEHICLE_RECURRENT);
+
+            ps.setString(1,vehicleRegNumber);
+            ps.setString(2,vehicleType.toString());
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                userRecurrent = true;
+                System.out.println("Vehicle already registered in the database");
+            }
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+        }catch (Exception ex){
+            logger.error("Error while determining if user is recurrent",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+            return userRecurrent;
         }
     }
 }
