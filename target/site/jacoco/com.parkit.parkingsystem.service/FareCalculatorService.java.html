@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FareCalculatorService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">parking-system</a> &gt; <a href="index.source.html" class="el_package">com.parkit.parkingsystem.service</a> &gt; <span class="el_source">FareCalculatorService.java</span></div><h1>FareCalculatorService.java</h1><pre class="source lang-java linenums">package com.parkit.parkingsystem.service;
+
+import com.parkit.parkingsystem.constants.Fare;
+import com.parkit.parkingsystem.dao.TicketDAO;
+import com.parkit.parkingsystem.model.Ticket;
+
+import java.util.Date;
+
+<span class="fc" id="L9">public class FareCalculatorService {</span>
+
+    public void calculateFare(Ticket ticket){
+<span class="pc bpc" id="L12" title="1 of 4 branches missed.">        if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){</span>
+<span class="fc" id="L13">            throw new IllegalArgumentException(&quot;Out time provided is incorrect:&quot;+ticket.getOutTime().toString());</span>
+        }
+        double durationFare;
+<span class="fc" id="L16">        double finalFare = 0;</span>
+<span class="fc" id="L17">        long durationInMinutes = getMinutesBetweenDates(ticket.getInTime(), ticket.getOutTime());</span>
+<span class="fc" id="L18">        System.out.println(&quot;Total park duration in minutes : &quot;+durationInMinutes);</span>
+
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">        if (durationInMinutes &lt;= 30){</span>
+<span class="nc" id="L21">            durationInMinutes = 0;</span>
+        }
+<span class="fc" id="L23">        System.out.println(&quot;Park duration in minutes with the free 30min: &quot;+durationInMinutes);</span>
+
+        //TODO: Some tests are failing here. Need to check if this logic is correct
+
+
+<span class="pc bpc" id="L28" title="1 of 3 branches missed.">        switch (ticket.getParkingSpot().getParkingType()){</span>
+            case CAR: {
+                // ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
+                //ticket.setPrice(durationInMinutes * Fare.CAR_RATE_PER_MIN);
+<span class="fc" id="L32">                durationFare = durationInMinutes * Fare.CAR_RATE_PER_MIN;</span>
+<span class="fc" id="L33">                break;</span>
+            }
+            case BIKE: {
+                // ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
+                // ticket.setPrice(durationInMinutes * Fare.BIKE_RATE_PER_MIN);
+<span class="fc" id="L38">                durationFare = durationInMinutes * Fare.BIKE_RATE_PER_MIN;</span>
+<span class="fc" id="L39">                break;</span>
+            }
+<span class="nc" id="L41">            default: throw new IllegalArgumentException(&quot;Unknown Parking Type&quot;);</span>
+        }
+
+<span class="fc" id="L44">        System.out.println(&quot;Fare before potential 5% reduction : &quot;+durationFare);</span>
+<span class="fc" id="L45">        TicketDAO ticketDAO = new TicketDAO();</span>
+<span class="fc" id="L46">        boolean isRecurrent = ticketDAO.isUserRecurrent(ticket.getVehicleRegNumber());</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">        if (isRecurrent){</span>
+<span class="nc" id="L48">            System.out.println(&quot;Apply the 5% reduction&quot;);</span>
+<span class="nc" id="L49">            finalFare = durationFare - (0.05 * durationFare);</span>
+        }
+        else{
+<span class="fc" id="L52">            finalFare = durationFare;</span>
+<span class="fc" id="L53">            System.out.println(&quot;Don't apply the 5% reduction&quot;);</span>
+        }
+<span class="fc" id="L55">        System.out.println(&quot;finalFare : &quot;+finalFare);</span>
+<span class="fc" id="L56">        ticket.setPrice(finalFare);</span>
+<span class="fc" id="L57">        System.out.println(&quot;plop&quot;);</span>
+<span class="fc" id="L58">    }</span>
+
+    public static long getMinutesBetweenDates(Date startDate, Date endDate) {
+        // Get the difference in milliseconds
+<span class="fc" id="L62">        long differenceInMillis = endDate.getTime() - startDate.getTime();</span>
+
+        // Convert milliseconds to minutes
+<span class="fc" id="L65">        long differenceInMinutes = differenceInMillis / (1000 * 60);</span>
+
+<span class="fc" id="L67">        return differenceInMinutes;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

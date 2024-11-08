@@ -53,6 +53,7 @@ public class ParkingSpotDAO {
             return false;
         }finally {
             dataBaseConfig.closeConnection(con);
+
         }
     }
 

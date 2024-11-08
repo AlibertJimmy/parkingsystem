@@ -1,5 +1,6 @@
 package com.parkit.parkingsystem;
 
+import com.parkit.parkingsystem.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
@@ -19,12 +20,12 @@ public class FareCalculatorServiceTest {
     private Ticket ticket;
 
     @BeforeAll
-    private static void setUp() {
+    public static void setUp() {
         fareCalculatorService = new FareCalculatorService();
     }
 
     @BeforeEach
-    private void setUpPerTest() {
+    public void setUpPerTest() {
         ticket = new Ticket();
     }
 
@@ -39,7 +40,7 @@ public class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
 
         fareCalculatorService.calculateFare(ticket);
-
+        System.out.println("plop");
         assertEquals(ticket.getPrice(), Fare.CAR_RATE_PER_HOUR);
     }
 
