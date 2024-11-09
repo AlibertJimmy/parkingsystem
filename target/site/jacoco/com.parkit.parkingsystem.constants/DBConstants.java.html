@@ -5,14 +5,26 @@
     public static final String GET_NEXT_PARKING_SPOT = &quot;select min(PARKING_NUMBER) from parking where AVAILABLE = true and TYPE = ?&quot;;
     public static final String UPDATE_PARKING_SPOT = &quot;update parking set available = ? where PARKING_NUMBER = ?&quot;;
 
+
+    // RELATED TO THE TICKET
     public static final String SAVE_TICKET = &quot;insert into ticket(PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME) values(?,?,?,?,?)&quot;;
     public static final String UPDATE_TICKET = &quot;update ticket set PRICE=?, OUT_TIME=? where ID=?&quot;;
     public static final String GET_TICKET = &quot;select t.PARKING_NUMBER, t.ID, t.PRICE, t.IN_TIME, t.OUT_TIME, p.TYPE from ticket t,parking p where p.parking_number = t.parking_number and t.VEHICLE_REG_NUMBER=? order by t.IN_TIME  limit 1&quot;;
+
+    public static final String CHECK_TICKET_EXISTENCE = &quot;SELECT EXISTS (\n&quot; +
+            &quot;    SELECT 1\n&quot; +
+            &quot;    FROM ticket\n&quot; +
+            &quot;    WHERE parking_number = ?\n&quot; +
+            &quot;      AND vehicle_reg_number = ?\n&quot; +
+            &quot;      AND in_time = ?\n&quot; +
+            &quot;) AS record_exists;\n&quot;;
 
     public static final String IS_VEHICLE_RECURRENT = &quot;SELECT *\n&quot; +
             &quot;FROM ticket\n&quot; +
             &quot;WHERE VEHICLE_REG_NUMBER = ?\n&quot; +
             &quot;  AND IN_TIME IS NOT NULL\n&quot; +
             &quot;  AND OUT_TIME IS NOT NULL;&quot;;
+
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
