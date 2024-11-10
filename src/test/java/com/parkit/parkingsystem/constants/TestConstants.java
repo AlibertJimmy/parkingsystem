@@ -17,6 +17,9 @@ public class TestConstants {
     public static final String VEHICLE_REG_NUMBER_TEST = "PLATEFORME";
 
     public static final Timestamp IN_TIME_TEST = Timestamp.valueOf("2024-11-08 09:00:00");
+    public static final Timestamp OUT_TIME_TEST = Timestamp.valueOf("2024-11-08 10:45:00");
+    public static final double PRICE_TEST = Fare.CAR_RATE_PER_MIN * ((OUT_TIME_TEST.getTime() - IN_TIME_TEST.getTime()) / (1000 * 60));
+
 
 
 

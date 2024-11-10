@@ -2,6 +2,7 @@ package com.parkit.parkingsystem.dao;
 
 import com.parkit.parkingsystem.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.constants.DBConstants;
+import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.constants.TestConstants;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
@@ -49,7 +50,7 @@ class TicketDAOTest {
 
             ticketDAO.saveTicket(ticketTest);
 
-            // Prepare the creation of the SQL request to check the existence of the geographicCoordinates previously created
+            // Prepare the creation of the SQL request to check the existence of the ticket previously created
             PreparedStatement psCheck = con.prepareStatement(DBConstants.CHECK_TICKET_EXISTENCE);
             psCheck.setDouble(1, ticketTest.getParkingSpot().getId());
             psCheck.setString(2, ticketTest.getVehicleRegNumber());
@@ -127,6 +128,61 @@ class TicketDAOTest {
 
     @Test
     void updateTicket() {
+        logger.info("Test : get Ticket");
+
+        Ticket ticketTest = new Ticket();
+
+        ParkingSpot parkingSpotTest = new ParkingSpot(TestConstants.PARKING_SPOT_NUMBER_TEST, TestConstants.PARKING_TYPE_TEST, TestConstants.PARKING_AVAILABILITY);
+
+        ticketTest.setId(TestConstants.TICKET_ID_TEST);
+        ticketTest.setParkingSpot(parkingSpotTest);
+        ticketTest.setVehicleRegNumber(TestConstants.VEHICLE_REG_NUMBER_TEST);
+        ticketTest.setInTime(TestConstants.IN_TIME_TEST);
+
+        Connection con = null;
+
+        try{
+            // Access the database threw the configuration of the test database
+            con = dataBaseTestConfig.getConnection();
+
+            // Prepare the save of the ticket
+            PreparedStatement psSave = con.prepareStatement(DBConstants.SAVE_TICKET);
+
+            psSave.setInt(1,ticketTest.getParkingSpot().getId());
+            psSave.setString(2, ticketTest.getVehicleRegNumber());
+            psSave.setDouble(3, ticketTest.getPrice());
+            psSave.setTimestamp(4, new Timestamp(ticketTest.getInTime().getTime()));
+            psSave.setTimestamp(5, (ticketTest.getOutTime() == null)?null: (new Timestamp(ticketTest.getOutTime().getTime())) );
+
+            // Save the ticket
+            psSave.execute();
+            psSave.close();
+
+            // Prepare the ticket to be updated
+            ticketTest.setPrice(TestConstants.PRICE_TEST);
+            ticketTest.setOutTime(TestConstants.OUT_TIME_TEST);
+            // Update it
+            ticketDAO.updateTicket(ticketTest);
+
+            // Prepare the get of the ticket
+            PreparedStatement psGet = con.prepareStatement(DBConstants.GET_TICKET);
+            psGet.setString(1, TestConstants.VEHICLE_REG_NUMBER_TEST);
+
+            ResultSet rs = psGet.executeQuery();
+            // psGet.close();
+            // rs.close();
+
+            if(rs.next()){
+                System.out.println("Test : "+rs.getInt(2));
+            }
+
+            assertEquals(rs.getDouble(3), TestConstants.PRICE_TEST, "Ticket prices should match.");
+            assertEquals(rs.getTimestamp(5), TestConstants.OUT_TIME_TEST, "Out times should match.");
+
+        }  catch (Exception e) {
+            e.printStackTrace();
+            throw  new RuntimeException("Failed during the test of : saveGeographicCoordinates");
+        }
     }
 
     @Test
