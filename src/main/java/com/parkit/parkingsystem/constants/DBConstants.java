@@ -25,5 +25,15 @@ public class DBConstants {
             "  AND IN_TIME IS NOT NULL\n" +
             "  AND OUT_TIME IS NOT NULL;";
 
+    // RELATED TO THE CLEANING OF THE DATABASE
+    public static final String TRUNCATE_TICKET = "TRUNCATE TABLE ticket;";
+    public static final String TRUNCATE_PARKING = "TRUNCATE TABLE parking;";
+
+    // RELATED TO THE FOREIGN KEY CHECK
+    // Temporarily disable foreign key checks
+    public static final String DISABLE_FOREIGN_KEY_CHECKS = "SET FOREIGN_KEY_CHECKS = 0;";
+
+    // Re-enable foreign key checks
+    public static final String ENABLE_FOREIGN_KEY_CHECKS = "SET FOREIGN_KEY_CHECKS = 1;";
 
 }

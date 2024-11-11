@@ -6,8 +6,11 @@ import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.constants.TestConstants;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
+import com.parkit.parkingsystem.services.ClearDataBase;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -25,11 +28,17 @@ class TicketDAOTest {
     private static final Logger logger = LogManager.getLogger("TicketDAOTest");
     public static TicketDAO ticketDAO = new TicketDAO();
     public static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
+    public static ClearDataBase clearDataBase = new ClearDataBase();
 
     @BeforeAll
     public static void setUp() throws Exception {
         ticketDAO = new TicketDAO();
         ticketDAO.dataBaseConfig = dataBaseTestConfig;
+    }
+
+    @AfterEach
+    public void cleanDataBase() throws  Exception {
+        clearDataBase.clearTicket();
     }
 
     @Test
@@ -128,7 +137,7 @@ class TicketDAOTest {
 
     @Test
     void updateTicket() {
-        logger.info("Test : get Ticket");
+        logger.info("Test : update Ticket");
 
         Ticket ticketTest = new Ticket();
 
@@ -169,8 +178,7 @@ class TicketDAOTest {
             psGet.setString(1, TestConstants.VEHICLE_REG_NUMBER_TEST);
 
             ResultSet rs = psGet.executeQuery();
-            // psGet.close();
-            // rs.close();
+
 
             if(rs.next()){
                 System.out.println("Test : "+rs.getInt(2));
@@ -178,6 +186,9 @@ class TicketDAOTest {
 
             assertEquals(rs.getDouble(3), TestConstants.PRICE_TEST, "Ticket prices should match.");
             assertEquals(rs.getTimestamp(5), TestConstants.OUT_TIME_TEST, "Out times should match.");
+
+            psGet.close();
+            rs.close();
 
         }  catch (Exception e) {
             e.printStackTrace();

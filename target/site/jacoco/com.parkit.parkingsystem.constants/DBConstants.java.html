@@ -25,6 +25,16 @@
             &quot;  AND IN_TIME IS NOT NULL\n&quot; +
             &quot;  AND OUT_TIME IS NOT NULL;&quot;;
 
+    // RELATED TO THE CLEANING OF THE DATABASE
+    public static final String TRUNCATE_TICKET = &quot;TRUNCATE TABLE ticket;&quot;;
+    public static final String TRUNCATE_PARKING = &quot;TRUNCATE TABLE parking;&quot;;
+
+    // RELATED TO THE FOREIGN KEY CHECK
+    // Temporarily disable foreign key checks
+    public static final String DISABLE_FOREIGN_KEY_CHECKS = &quot;SET FOREIGN_KEY_CHECKS = 0;&quot;;
+
+    // Re-enable foreign key checks
+    public static final String ENABLE_FOREIGN_KEY_CHECKS = &quot;SET FOREIGN_KEY_CHECKS = 1;&quot;;
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
