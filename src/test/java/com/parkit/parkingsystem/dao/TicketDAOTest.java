@@ -198,5 +198,36 @@ class TicketDAOTest {
 
     @Test
     void isUserRecurrent() {
+        logger.info("Test : is User Recurrent");
+
+        Connection con = null;
+
+        try{
+            // Access the database threw the configuration of the test database
+            con = dataBaseTestConfig.getConnection();
+
+            // Prepare the save of the ticket
+            PreparedStatement psSave = con.prepareStatement(DBConstants.SAVE_TICKET);
+
+            psSave.setInt(1,TestConstants.TICKET_ID_TEST);
+            psSave.setString(2, TestConstants.VEHICLE_REG_NUMBER_TEST);
+            psSave.setDouble(3, TestConstants.PRICE_TEST);
+            psSave.setTimestamp(4, TestConstants.IN_TIME_TEST);
+            psSave.setTimestamp(5, TestConstants.OUT_TIME_TEST);
+
+            // Save the ticket
+            psSave.execute();
+            psSave.close();
+
+            // Test if the user is recurrent
+            boolean isUserRecurrentResult = ticketDAO.isUserRecurrent(TestConstants.VEHICLE_REG_NUMBER_TEST);
+
+            assertTrue(isUserRecurrentResult, "User is recurrent");
+
+
+        }  catch (Exception e) {
+            e.printStackTrace();
+            throw  new RuntimeException("Failed during the test of : saveGeographicCoordinates");
+        }
     }
 }
