@@ -8,6 +8,8 @@
 
     public static final String UPDATE_PARKING_SPOT = &quot;update parking set available = ? where PARKING_NUMBER = ?&quot;;
 
+    public static final String CHECK_PARKING_SPOT_STATE = &quot;select available FROM parking WHERE parking_number = 1&quot;;
+    public static final String SET_PARKING_SPOT_TRUE = &quot;update parking set  available = true where parking_number = 1;&quot;;
 
     // RELATED TO THE TICKET
     public static final String SAVE_TICKET = &quot;insert into ticket(PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME) values(?,?,?,?,?)&quot;;

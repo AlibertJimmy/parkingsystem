@@ -8,6 +8,8 @@ public class DBConstants {
 
     public static final String UPDATE_PARKING_SPOT = "update parking set available = ? where PARKING_NUMBER = ?";
 
+    public static final String CHECK_PARKING_SPOT_STATE = "select available FROM parking WHERE parking_number = 1";
+    public static final String SET_PARKING_SPOT_TRUE = "update parking set  available = true where parking_number = 1;";
 
     // RELATED TO THE TICKET
     public static final String SAVE_TICKET = "insert into ticket(PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME) values(?,?,?,?,?)";

@@ -61,5 +61,19 @@ public class ClearDataBase {
             throw  new RuntimeException("Database cleaning failed");
         }
     }
+
+    public void resetParkingSpotOne(){
+        try{
+            Connection con = dataBaseTestConfig.getConnection();
+            PreparedStatement psSetState = con.prepareStatement(DBConstants.SET_PARKING_SPOT_TRUE);
+            psSetState.execute();
+            psSetState.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw  new RuntimeException("Database cleaning failed");
+        }
+
+    }
 }
 
