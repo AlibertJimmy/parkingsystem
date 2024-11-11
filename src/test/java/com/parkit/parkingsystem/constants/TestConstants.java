@@ -20,6 +20,8 @@ public class TestConstants {
     public static final Timestamp OUT_TIME_TEST = Timestamp.valueOf("2024-11-08 10:45:00");
     public static final double PRICE_TEST = Fare.CAR_RATE_PER_MIN * ((OUT_TIME_TEST.getTime() - IN_TIME_TEST.getTime()) / (1000 * 60));
 
+    // RELATED TO THE PARKING
+
 
 
 

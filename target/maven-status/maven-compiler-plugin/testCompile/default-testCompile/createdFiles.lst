@@ -7,5 +7,6 @@ com\parkit\parkingsystem\integration\service\DataBasePrepareService.class
 com\parkit\parkingsystem\dao\TicketDAOTestMock.class
 com\parkit\parkingsystem\config\DataBaseTestConfig.class
 com\parkit\parkingsystem\services\ClearDataBase.class
+com\parkit\parkingsystem\dao\ParkingSpotDAOTest.class
 com\parkit\parkingsystem\FareCalculatorServiceTest.class
 com\parkit\parkingsystem\integration\config\DataBaseTestConfig.class
